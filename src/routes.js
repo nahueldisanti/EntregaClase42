@@ -1,6 +1,8 @@
 import passport from "passport";
 import { Router } from 'express'
 import { isAuth } from './middlewares/isAuth.js'
+import { fork } from "child_process"
+import info from "./info.js"
 
 const routes = Router()
 
@@ -41,5 +43,23 @@ routes.get('/error-signup', (req, res) => {
     res.render('error-signup')
 })
 
+//INFO ROUTES
+
+routes.get('/info', (req,res) => {
+    res.render('info', {info: info()})
+});
+
+//RANDOM ROUTE
+
+routes.get('/api/randoms', (req, res) => {
+    let cant = req.query.cant || 10000;
+    const child = fork('./random.js');
+
+    child.send(cant);
+
+    child.on('message', (operation) => {
+        res.render('random', {operation: operation});
+    });
+})
 
 export default routes
