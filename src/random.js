@@ -12,7 +12,7 @@ function randomNumbers(cant) {
 
 
 
-process.on('message', (passCant) => {
-    console.log(passCant);
-    process.send(randomNumbers(passCant));
+process.on('message', (cant) => {
+    console.log(cant);
+    process.send(randomNumbers(cant));
 })
