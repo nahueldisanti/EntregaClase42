@@ -5,6 +5,7 @@ import mongoose from "mongoose"
 import passport from "passport"
 import routes from './src/routes.js'
 import { strategyLogin, strategySignUp } from "./src/middlewares/passport.js"
+import parseArgs from "minimist"
 
 const app = express();
 
@@ -44,5 +45,24 @@ try{
     console.log(`Ha habido un error en la config del server mongo ${error}`)
 }
 
-const PORT = process.env.PORT
+const options = {
+    alias: {
+        m: 'modo',
+        p: 'puerto',
+        d: 'debug'
+    },
+    default: {
+        modo: 'prod',
+        puerto: 8080,
+        debug: false
+    }
+    }
+
+
+const commandLineArgs = process.argv.slice(2);
+
+const { modo, puerto, debug, _ } = parseArgs(commandLineArgs, options);
+
+const PORT = puerto; 
+
 app.listen(PORT, () => console.log(`http://localhost:${PORT}/ecommerce/`)) 
