@@ -4,8 +4,16 @@ import 'dotenv/config'
 import mongoose from "mongoose"
 import passport from "passport"
 import routes from './src/routes.js'
-import { strategyLogin, strategySignUp } from "./src/middlewares/passport.js"
-import parseArgs from "minimist"
+import {
+    strategyLogin,
+    strategySignUp
+} from "./src/middlewares/passport.js"
+
+import cluster from 'cluster'
+import os from 'os'
+
+
+
 
 const app = express();
 
@@ -14,7 +22,9 @@ passport.use('signup', strategySignUp);
 
 app.set('view engine', 'ejs');
 app.set('views', './src/views');
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({
+    extended: true
+}))
 app.use(express.json())
 
 app.use(session({
@@ -34,35 +44,46 @@ app.use(passport.session())
 
 app.use('/ecommerce', routes)
 
-const connectionStringUrl =  process.env.MONGODB
 
-try{
-    await mongoose.connect(connectionStringUrl, {
-        useUnifiedTopology: true
-    })
-    console.log('Base de datos conectada')
-}catch(error){
-    console.log(`Ha habido un error en la config del server mongo ${error}`)
+const connectionStringUrl = process.env.MONGODB
+
+//MASTER
+
+const modoServer = args.modo || 'FORK';
+
+if (modoServer == 'CLUSTER') {
+    if (cluster.isPrimary) {
+        const numCPUs = os.cpus().length;
+
+        console.log(`Primary ${process.pid} id running`);
+        console.log(`número de procesadores: ${numCPUs}`);
+
+        for (let i = 0; i < numCPUs; i++) {
+            cluster.fork();
+        }
+        cluster.on('exit', worker => {
+            console.log(`Worker ${worker.process.pid} died`, new Date().toLocaleString());
+            cluster.fork();
+        })
+    }
+} else {
+
+    const app = express();
+    const PORT = parseInt(process.argv[2]) || process.env.PORT
+    const STATIC = process.argv[4] == 'STATIC';
+
+    if (STATIC) {
+
+        app.use(express.static('/public'));
+        app.use(express.json());
+        app.use(express.urlencoded({
+            extended: true
+        }));
+    }
+
+    const server = app.listen(PORT, () => {
+        console.log(`http://localhost:${PORT}/ecommerce/ o http://localhost:${PORT}/api/random/ - PID ${process.pid}`);
+    });
+    server.on('error', error => console.log(`Error en servidor ${error}`));
+
 }
-
-const options = {
-    alias: {
-        m: 'modo',
-        p: 'puerto',
-        d: 'debug'
-    },
-    default: {
-        modo: 'prod',
-        puerto: 8080,
-        debug: false
-    }
-    }
-
-
-const commandLineArgs = process.argv.slice(2);
-
-const { modo, puerto, debug, _ } = parseArgs(commandLineArgs, options);
-
-const PORT = puerto; 
-
-app.listen(PORT, () => console.log(`http://localhost:${PORT}/ecommerce/`)) 
