@@ -1,4 +1,4 @@
-export function info() {
+export default function info() {
     const argumentoDeEntrada = process.argv
     const sistemaOperativo = process.platform
     const versionNodeJS = process.version
@@ -8,3 +8,4 @@ export function info() {
     const carpetaDelProyecto = process.cwd()
     return {argumentoDeEntrada, sistemaOperativo, versionNodeJS, memoriaTotalReservada, pathDeEjecucion, processId, carpetaDelProyecto}
 }
+

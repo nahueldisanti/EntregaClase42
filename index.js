@@ -11,7 +11,7 @@ import {
 
 import cluster from 'cluster'
 import os from 'os'
-import { loggerInfo } from './src/utils/log4js.js'
+import { loggerInfo } from './utils/log4js.js'
 
 
 
@@ -69,7 +69,7 @@ if (modoServer == 'CLUSTER') {
 } else {
 
     const app = express();
-    const PORT = parseInt(process.argv[2]) || process.env.PORT
+    const PORT = parseInt(process.argv[3]) || process.env.PORT
     const STATIC = process.argv[4] == 'STATIC';
 
     if (STATIC) {

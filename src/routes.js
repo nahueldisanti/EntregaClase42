@@ -110,12 +110,21 @@ routes.get('*', (req, res, next) => {
 //RANDOM ROUTE
 
 routes.get('/api/randoms', (req, res) => {
-    let cant = req.query.cant || 10000;
-    const child = fork('./random.js');
-    child.send(cant);
-    child.on('message', (operation) => {
-        res.render('random', {operation: operation});
+    try{
+        loggerInfo.info('Se ha accedido a /random')
+        let cant = req.query.cant || 10000;
+        const child = fork('./random.js');
+
+        child.send(cant);
+
+        child.on('message', (operation) => {
+            res.render('random', {operation: operation});
     });
+
+    }catch (error) {
+        loggerError.error('Error en /random: ' + error)
+        res.send('Error')
+}
 })
 
 export default routes

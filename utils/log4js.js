@@ -1,4 +1,6 @@
-const log4js = require('log4js');
+import Log4js from "log4js";
+
+const log4js = Log4js;
 
 log4js.configure({
     appenders: {
