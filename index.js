@@ -11,6 +11,7 @@ import {
 
 import cluster from 'cluster'
 import os from 'os'
+import { loggerInfo } from './src/utils/log4js.js'
 
 
 
@@ -54,15 +55,14 @@ const modoServer = args.modo || 'FORK';
 if (modoServer == 'CLUSTER') {
     if (cluster.isPrimary) {
         const numCPUs = os.cpus().length;
-
-        console.log(`Primary ${process.pid} id running`);
-        console.log(`número de procesadores: ${numCPUs}`);
+        
+        loggerInfo.info(`Master ${process.pid} id running. Numero de procesadores ${numCPUs}`)
 
         for (let i = 0; i < numCPUs; i++) {
             cluster.fork();
         }
         cluster.on('exit', worker => {
-            console.log(`Worker ${worker.process.pid} died`, new Date().toLocaleString());
+            loggerInfo.info(`worker ${worker.process.pid} died`);
             cluster.fork();
         })
     }
@@ -82,7 +82,7 @@ if (modoServer == 'CLUSTER') {
     }
 
     const server = app.listen(PORT, () => {
-        console.log(`http://localhost:${PORT}/ecommerce/ o http://localhost:${PORT}/api/random/ - PID ${process.pid}`);
+        loggerInfo.info(`http://localhost:${PORT}/ecommerce/ o http://localhost:${PORT}/api/random/ - PID ${process.pid}`);
     });
     server.on('error', error => console.log(`Error en servidor ${error}`));
 
