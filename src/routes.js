@@ -64,7 +64,6 @@ routes.get('/logout', isAuth, (req, res) => {
 routes.get('/error-login', (req, res) => {
     try{
         loggerInfo.info('No se ha podido iniciar sesión')
-        if (req.isAuthenticated()) return res.redirect('/ecommerce')
         res.render('error-login')
     } catch(error) {
         loggerError.error('Error en /error-login: ' + error)
@@ -74,7 +73,6 @@ routes.get('/error-login', (req, res) => {
 routes.get('/error-signup', (req, res) => {
     try{
         loggerInfo.info('No se ha podido registrar el usuario')
-        if (req.isAuthenticated()) return res.redirect('/ecommerce')
         res.render('error-signup')
 
     } catch(error) {
@@ -96,7 +94,7 @@ routes.get('/info', (req,res) => {
 
 });
 
-routes.get('*', (req, res, next) => {
+routes.get('/*', (req, res, next) => {
     try {
     loggerWarn.warn("Ruta inexistente");
     res.redirect('/ecommerce')
@@ -109,22 +107,23 @@ routes.get('*', (req, res, next) => {
 
 //RANDOM ROUTE
 
-routes.get('/api/randoms', (req, res) => {
-    try{
-        loggerInfo.info('Se ha accedido a /random')
-        let cant = req.query.cant || 10000;
-        const child = fork('./random.js');
+// routes.get('/random', (req, res) => {
+//     try{
+//         loggerInfo.info('Se ha accedido a /random')
+//         let cant = req.query.cant || 10000;
+//         let passCant = ['' + cant + '']
+//         const child = fork('./random.js');
 
-        child.send(cant);
+//         child.send(passCant);
 
-        child.on('message', (operation) => {
-            res.render('random', {operation: operation});
-    });
+//         child.on('message', (operation) => {
+//             res.render('random', {operation: operation});
+//     });
 
-    }catch (error) {
-        loggerError.error('Error en /random: ' + error)
-        res.send('Error')
-}
-})
+//     }catch (error) {
+//         loggerError.error('Error en /random: ' + error)
+//         res.send('Error')
+// }
+// })
 
 export default routes

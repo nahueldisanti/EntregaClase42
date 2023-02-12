@@ -1,0 +1,18 @@
+/*
+// comparación desde node
+
+node index.js FORK
+artillery quick -c 50 -n 50 "http://localhost:8081/random/random?cant=100" > artillery_fork.txt
+
+node index.js CLUSTER
+artillery quick -c 50 -n 50 "http://localhost:8081/random/random?cant=10" > artillery_cluster.txt
+
+
+// comparación desde 0x
+0x index.js
+autocannon -d 20 -c 500 "http://localhost:8081/random/random?cant=10"
+detenemos el server de 0x
+0x index .js
+autocannon -d 20 -c 500 "http://localhost:8081/random/random?cant=10"
+detenemos el server de 0x
+*/

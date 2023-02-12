@@ -13,7 +13,9 @@ import cluster from 'cluster'
 import os from 'os'
 import { loggerInfo } from './utils/log4js.js'
 
+import randomRoute from './src/randomRoute.js'
 
+const PORT = parseInt(process.argv[3]) || process.env.PORT
 
 
 const app = express();
@@ -22,7 +24,7 @@ passport.use('login', strategyLogin);
 passport.use('signup', strategySignUp);
 
 app.set('view engine', 'ejs');
-app.set('views', './src/views');
+app.set('views', './src/middlewares/views');
 app.use(express.urlencoded({
     extended: true
 }))
@@ -44,13 +46,14 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.use('/ecommerce', routes)
-
+app.use('/random', randomRoute)
 
 const connectionStringUrl = process.env.MONGODB
+mongoose.connect(connectionStringUrl)
 
 //MASTER
 
-const modoServer = args.modo || 'FORK';
+const modoServer = process.argv[2] || 'FORK';
 
 if (modoServer == 'CLUSTER') {
     if (cluster.isPrimary) {
@@ -63,27 +66,23 @@ if (modoServer == 'CLUSTER') {
         }
         cluster.on('exit', worker => {
             loggerInfo.info(`worker ${worker.process.pid} died`);
-            cluster.fork();
+            //cluster.fork();
         })
-    }
+    } else {
+
+        const server = app.listen(PORT, () => {
+            loggerInfo.info(`http://localhost:${PORT}/ecommerce/ o http://localhost:${PORT}/random/random - PID ${process.pid}`);
+            server.on('error', error => console.log(`Error en servidor ${error}`));
+            loggerInfo.info(`Worker ${process.pid} started`);
+        });
+    } 
+
 } else {
 
-    const app = express();
-    const PORT = parseInt(process.argv[3]) || process.env.PORT
-    const STATIC = process.argv[4] == 'STATIC';
-
-    if (STATIC) {
-
-        app.use(express.static('/public'));
-        app.use(express.json());
-        app.use(express.urlencoded({
-            extended: true
-        }));
-    }
-
+        
     const server = app.listen(PORT, () => {
-        loggerInfo.info(`http://localhost:${PORT}/ecommerce/ o http://localhost:${PORT}/api/random/ - PID ${process.pid}`);
+        loggerInfo.info(`http://localhost:${PORT}/ecommerce/ o http://localhost:${PORT}/random/random - PID ${process.pid}`);
     });
     server.on('error', error => console.log(`Error en servidor ${error}`));
-
 }
+
