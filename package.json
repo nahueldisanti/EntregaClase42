@@ -4,15 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "0x index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "type": "module",
   "author": "nds",
   "license": "ISC",
   "dependencies": {
-    "0x": "^5.4.1",
     "artillery": "^2.0.0-30",
-    "autocannon": "^7.10.0",
     "bcrypt": "^5.0.1",
     "child_process": "^1.0.2",
     "cluster": "^0.7.7",
