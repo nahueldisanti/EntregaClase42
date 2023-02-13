@@ -49,7 +49,12 @@ app.use('/ecommerce', routes)
 app.use('/random', randomRoute)
 
 const connectionStringUrl = process.env.MONGODB
-mongoose.connect(connectionStringUrl)
+mongoose.connect(connectionStringUrl,
+    { useNewUrlParser: true, useUnifiedTopology: true},
+    () => {
+        console.log('Connected to MongoDB');
+    
+    });
 
 //MASTER
 
