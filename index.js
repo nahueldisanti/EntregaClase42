@@ -51,16 +51,23 @@ app.use('/random', randomRoute)
 const connectionStringUrl = process.env.MONGODB
 
 
-async function connectToMongo() {
-    await mongoose.connect(connectionStringUrl,
-    { useNewUrlParser: true, useUnifiedTopology: true},
-    () => {
-        console.log('Connected to MongoDB');
+// async function connectToMongo() {
+//     await mongoose.connect(connectionStringUrl,
+//     { useNewUrlParser: true, useUnifiedTopology: true},
+//     () => {
+//         console.log('Connected to MongoDB');
     
-    });
-}
+//     });
+// }
 
-connectToMongo();
+mongoose.connect(connectionStringUrl,
+    { useNewUrlParser: true, 
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 10000
+})
+.then(() => console.log('Conectado a Mongo'))
+.catch(err => console.log(err));
+
 
 //MASTER
 
