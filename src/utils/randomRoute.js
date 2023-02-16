@@ -1,14 +1,14 @@
 
 import { Router } from 'express'
 import { fork } from "child_process"
-import { loggerInfo, loggerError, loggerWarn } from '../utils/log4js.js'
+import { loggerInfo, loggerError, loggerWarn } from './log4js.js'
 
 const randomRoute = Router()
 
-randomRoute.get('/random', (req, res) => {
+randomRoute.get('/', (req, res) => {
     try{
         loggerInfo.info('Se ha accedido a /random')
-        let cant = req.query.cant || parseInt(100);
+        let cant = req.query.cant || 10;
         //let passCant = ['' + cant + '']
         const child = fork('./random.js');
         

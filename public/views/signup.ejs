@@ -12,10 +12,10 @@
         <h1>Registre un nuevo usuario</h1>
         <div class="row">
             <div class="col-sm-8 col-lg-4 col-md-6">
-                <form class="form" action="/ecommerce/signup" method="post" role="form" autocomplete="off">
+                <form class="form" action="/signup" method="post" role="form" autocomplete="off">
                     <legend>Ingrese sus datos:</legend>
                     <div class="form-group mt-4">
-                        <input id="username" name='name' placeholder="Nombre" class="form-control" type="text" required autofocus>
+                        <input id="username" name='name' placeholder="Nombre y Apellido" class="form-control" type="text" required autofocus>
                     </div>
                     <br>
                     <div class="form-group">
@@ -27,9 +27,25 @@
                     </div>
                     <br>
                     <div class="form-group">
+                        <input id="domicilio" name='domicilio' placeholder="Domicilio" class="form-control" type="text" required>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <input id="edad" name='edad' placeholder="Edad" class="form-control" type="number" required>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <input id="tel" name='tel' placeholder="Celular" class="form-control" type="tel" required>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <input id="avatar" name='avatar' placeholder="Ingrese el link a su avatar" class="form-control" type="url" required>
+                    </div>
+                    <br>
+                    <div class="form-group">
                         <div class="d-grid gap-2">
                             <input class="btn btn-danger" type="submit" value="Registrar">
-                            <a class="btn btn-outline-danger" href="/ecommerce/login">Ya tengo cuenta</a>
+                            <a class="btn btn-outline-danger" href="/login">Ya tengo cuenta</a>
                         </div>
                     </div>
                 </form>

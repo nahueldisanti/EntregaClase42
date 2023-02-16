@@ -15,8 +15,8 @@ log4js.configure({
 },  
     categories: {
         default: { appenders: ["loggerConsola"], level: 'all'},
-        categWarn: { appenders: ["loggerArchivoErrores"], level: 'all'},
-        categError: { appenders: ["loggerArchivoWarn"], level: 'all'}
+        categWarn: { appenders: ["loggerArchivoWarn"], level: 'all'},
+        categError: { appenders: ["loggerArchivoErrores"], level: 'all'}
 }
 });
 

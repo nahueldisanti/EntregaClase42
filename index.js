@@ -1,19 +1,14 @@
 import express from "express"
 import session from "express-session"
 import 'dotenv/config'
-import mongoose from "mongoose"
 import passport from "passport"
-import routes from './src/routes.js'
-import {
-    strategyLogin,
-    strategySignUp
-} from "./src/middlewares/passport.js"
-
+import routes from './src/routes/routes.js'
+import { strategyLogin, strategySignUp } from "./src/middlewares/passport.js"
 import cluster from 'cluster'
 import os from 'os'
-import { loggerInfo } from './utils/log4js.js'
-
-import randomRoute from './src/randomRoute.js'
+import { loggerInfo } from './src/utils/log4js.js'
+import randomRoute from './src/utils/randomRoute.js'
+import { dbConnect } from "./src/db/dataBaseConnect.js"
 
 const PORT = parseInt(process.argv[3]) || process.env.PORT
 
@@ -24,7 +19,7 @@ passport.use('login', strategyLogin);
 passport.use('signup', strategySignUp);
 
 app.set('view engine', 'ejs');
-app.set('views', './src/middlewares/views');
+app.set('views', './public/views');
 app.use(express.urlencoded({
     extended: true
 }))
@@ -45,31 +40,10 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.use('/ecommerce', routes)
+app.use('/', routes)
 app.use('/random', randomRoute)
 
-const connectionStringUrl = process.env.MONGODB
-
-
-// async function connectToMongo() {
-//     await mongoose.connect(connectionStringUrl,
-//     { useNewUrlParser: true, useUnifiedTopology: true},
-//     () => {
-//         console.log('Connected to MongoDB');
-    
-//     });
-// }
-
-mongoose.connect(connectionStringUrl,
-    { useNewUrlParser: true, 
-    useUnifiedTopology: true,
-    serverSelectionTimeoutMS: 10000
-})
-.then(() => console.log('Conectado a Mongo'))
-.catch(err => console.log(err));
-
-
-//MASTER
+dbConnect;
 
 const modoServer = process.argv[2] || 'FORK';
 
@@ -89,7 +63,7 @@ if (modoServer == 'CLUSTER') {
     } else {
 
         const server = app.listen(PORT, () => {
-            loggerInfo.info(`http://localhost:${PORT}/ecommerce/ o http://localhost:${PORT}/random/random - PID ${process.pid}`);
+            loggerInfo.info(`http://localhost:${PORT}/  - PID ${process.pid}`);
             server.on('error', error => console.log(`Error en servidor ${error}`));
             loggerInfo.info(`Worker ${process.pid} started`);
         });
@@ -99,7 +73,7 @@ if (modoServer == 'CLUSTER') {
 
         
     const server = app.listen(PORT, () => {
-        loggerInfo.info(`http://localhost:${PORT}/ecommerce/ o http://localhost:${PORT}/random/random - PID ${process.pid}`);
+        loggerInfo.info(`http://localhost:${PORT}/ - PID ${process.pid}`);
     });
     server.on('error', error => console.log(`Error en servidor ${error}`));
 }

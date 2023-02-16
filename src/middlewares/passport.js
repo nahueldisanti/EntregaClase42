@@ -1,7 +1,8 @@
 import passport from 'passport'
 import { Strategy } from 'passport-local';
-import { User } from "../user.js"
-import { isValidPassword, createHash } from "../bcrypt.js"
+import { User } from "../mongo-models/user-model.js"
+import { isValidPassword, createHash } from "../utils/bcrypt.js"
+import { Product } from '../mongo-models/product-model.js'
 
 passport.serializeUser((user, done) => {
     done(null, user._id);
@@ -45,6 +46,10 @@ export const strategySignUp = new Strategy({
             name: req.body.name,
             username: req.body.username,
             password: createHash(password),
+            domicilio: req.body.domicilio, 
+            edad: req.body.edad, 
+            tel: req.body.tel, 
+            avatar: req.body.avatar
         }
         User.create(newUser, (err, userWithId) => {
             if (err) {

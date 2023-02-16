@@ -1,8 +1,7 @@
 import passport from "passport";
 import { Router } from 'express'
-import { isAuth } from './middlewares/isAuth.js'
-import { fork } from "child_process"
-import info from "./info.js"
+import { isAuth } from '../utils/isAuth.js'
+import info from "../utils/info.js"
 import { loggerInfo, loggerError, loggerWarn } from '../utils/log4js.js'
 
 const routes = Router()
@@ -24,14 +23,15 @@ routes.get('/', isAuth, (req, res) => {
 routes.get('/login', (req, res) => {
     try{
         loggerInfo.info('Accedió correctamente a /login')
-        if (req.isAuthenticated()) return res.redirect('/ecommerce')
+        if (req.isAuthenticated()) return res.redirect('/')
         res.render('login')
     } catch(error) {
         loggerError.error('Error en /login: ' + error)
         res.send('Error')
     }
 })
-routes.post('/login', passport.authenticate('login', {failureRedirect: '/ecommerce/error-login'}), (req, res) => res.redirect('/ecommerce/'))
+
+routes.post('/login', passport.authenticate('login', {failureRedirect: '/error-login'}), (req, res) => res.redirect('/'))
 
 //SIGNUP
 routes.get('/signup', (req, res) => {
@@ -44,15 +44,15 @@ routes.get('/signup', (req, res) => {
         res.send('Error')
     }
 })
-routes.post('/signup', passport.authenticate('signup', {failureRedirect: '/ecommerce/error-signup'}), (req, res) => res.redirect('/ecommerce/login'))
+routes.post('/signup', passport.authenticate('signup', {failureRedirect: '/error-signup'}), (req, res) => res.redirect('/login'))
 
 //LOGOUT
-routes.get('/logout', isAuth, (req, res) => {
+routes.get('/logout',isAuth, (req, res) => {
     try {
         loggerInfo.info('Se ha deslogueado la sesión correctamente')
         req.logout(err => {
             if (err) return err
-            res.redirect('/ecommerce/login')
+            res.redirect('/login')
         })
     } catch (error) {
         loggerError.error('Error en /logout: ' + error)
@@ -85,19 +85,18 @@ routes.get('/error-signup', (req, res) => {
 
 routes.get('/info', (req,res) => {
     try{
-        res.render('info', {info: info()});
+        res.render('/info', {info: info()});
         loggerInfo.info('Accedió correctamente a /info');
     } catch(error) {
         loggerError.error('Error en /info: ' + error)
         res.send('Error')
     }
-
 });
 
 routes.get('/*', (req, res, next) => {
     try {
     loggerWarn.warn("Ruta inexistente");
-    res.redirect('/ecommerce')
+    res.redirect('/login')
     next();
     } catch (error) {
         loggerError.error('Error en la ruta: ' + error.message)
@@ -105,25 +104,6 @@ routes.get('/*', (req, res, next) => {
     }
 })
 
-//RANDOM ROUTE
 
-// routes.get('/random', (req, res) => {
-//     try{
-//         loggerInfo.info('Se ha accedido a /random')
-//         let cant = req.query.cant || 10000;
-//         let passCant = ['' + cant + '']
-//         const child = fork('./random.js');
-
-//         child.send(passCant);
-
-//         child.on('message', (operation) => {
-//             res.render('random', {operation: operation});
-//     });
-
-//     }catch (error) {
-//         loggerError.error('Error en /random: ' + error)
-//         res.send('Error')
-// }
-// })
 
 export default routes
