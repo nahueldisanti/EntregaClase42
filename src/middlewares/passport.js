@@ -3,6 +3,7 @@ import { Strategy } from 'passport-local';
 import { User } from "../mongo-models/user-model.js"
 import { isValidPassword, createHash } from "../utils/bcrypt.js"
 import { Product } from '../mongo-models/product-model.js'
+import { sendMail } from "../utils/nodemailer.js"
 
 passport.serializeUser((user, done) => {
     done(null, user._id);
@@ -42,9 +43,13 @@ export const strategySignUp = new Strategy({
             console.log('El usuario ya existe');
             return done(null, false)
         }
+
+        sendMail(req.body, username);
+
         const newUser = {
             name: req.body.name,
             username: req.body.username,
+            correo: req.body.correo, 
             password: createHash(password),
             domicilio: req.body.domicilio, 
             edad: req.body.edad, 
