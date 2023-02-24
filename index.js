@@ -3,12 +3,12 @@ import session from "express-session"
 import 'dotenv/config'
 import passport from "passport"
 import routes from './src/routes/routes.js'
-import { strategyLogin, strategySignUp } from "./src/middlewares/passport.js"
+import { strategyLogin, strategySignUp } from "./src/routes/middlewares/passport.js"
 import cluster from 'cluster'
 import os from 'os'
-import { loggerInfo } from './src/utils/log4js.js'
-import randomRoute from './src/utils/randomRoute.js'
-import { dbConnect } from "./src/db/dataBaseConnect.js"
+import { loggerInfo } from './src/controller/log4js.js'
+import randomRoute from './src/routes/randomRoute.js'
+import { dbConnect } from "./src/persistance/db/dataBaseConnect.js"
 
 const PORT = parseInt(process.argv[3]) || process.env.PORT
 

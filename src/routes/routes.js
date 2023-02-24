@@ -1,8 +1,8 @@
 import passport from "passport";
 import { Router } from 'express'
-import { isAuth } from '../utils/isAuth.js'
-import info from "../utils/info.js"
-import { loggerInfo, loggerError, loggerWarn } from '../utils/log4js.js'
+import { isAuth } from '../controller/isAuth.js'
+import info from "../controller/info.js"
+import { loggerInfo, loggerError, loggerWarn } from '../controller/log4js.js'
 
 const routes = Router()
 
