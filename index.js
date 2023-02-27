@@ -7,7 +7,7 @@ import { strategyLogin, strategySignUp } from "./src/routes/middlewares/passport
 import cluster from 'cluster'
 import os from 'os'
 import { loggerInfo } from './src/controller/log4js.js'
-import randomRoute from './src/routes/randomRoute.js'
+import randomRoute from './src/routes/random-route.js'
 import { dbConnect } from "./src/persistance/db/dataBaseConnect.js"
 
 const PORT = parseInt(process.argv[3]) || process.env.PORT

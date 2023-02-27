@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 import nodemailer from 'nodemailer'
-import { loggerInfo, loggerError} from "../utils/log4js"
+import { loggerInfo, loggerError} from "../controller/log4js"
 
 const etherealUser = process.env.ETHEREAL_USER
 const etheralPass =  process.env.ETHERAL_PASS
