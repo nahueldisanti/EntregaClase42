@@ -89,4 +89,4 @@ class ProductsController {
     }
 }
 
-module.exports = ProductsServices
+module.exports = ProductsController
