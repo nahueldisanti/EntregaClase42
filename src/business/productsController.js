@@ -1,4 +1,4 @@
-import ProductsDaoClass from "../persistance/DAO/productsDaoMongo.js"
+import ProductsDaoClass from "../persistance/models/DAO/productosDao/productsDaoMongo.js"
 const prodDao = new ProductsDaoClass()
 
 

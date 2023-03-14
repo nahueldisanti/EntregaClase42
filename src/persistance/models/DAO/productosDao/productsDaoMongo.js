@@ -1,6 +1,8 @@
-import { Product } from "../mongo-models/product-model.js";
+import { Product } from "../../mongo-models/product-model.js";
 
 class ProductsDaoClass {
+
+    
     async getAllProducts(){
         try{
             const list = await Product.find({})

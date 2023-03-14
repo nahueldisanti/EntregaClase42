@@ -16,5 +16,18 @@ export const Product = mongoose.model('Product', new mongoose.Schema({
     category:{
         type: String,
         required: true
+    },
+    timestamp: {
+        type: Date, 
+        default: Date.now, 
+        required: false
+    },
+    description: {
+        type: String, 
+        required: true
+    },
+    stock: {
+        type: Number, 
+        required: true
     }
 }));
