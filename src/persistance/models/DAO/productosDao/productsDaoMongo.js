@@ -1,6 +1,12 @@
 import { Product } from "../../mongo-models/product-model.js";
+import MongoClient from "../../../db/dataBaseConnect.js"
 
 class ProductsDaoClass {
+
+    constructor() {
+        this.client = new MongoClient();
+        this.client.connect();
+    }
 
     
     async getAllProducts(){
@@ -56,6 +62,11 @@ class ProductsDaoClass {
             logger.error("Error in getProductsByCategory: " + error)
         }
     }
-}
+
+    exit () {
+        this.client.disconnect();
+    };
+
+};
 
 export default ProductsDaoClass
