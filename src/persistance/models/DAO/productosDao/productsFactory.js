@@ -8,17 +8,18 @@ let DAO
 
 switch (persistance){
     case 'mem':
-        DAO = new ProductsDaoMem();
+        DAO = new ProductsDaoMem.getInstance();
         console.log('Cambiando a persitencia en Memoria local')
         break
     
         default: 
-        DAO = new ProductsDaoClass();
+        DAO = new ProductsDaoClass.getInstance();
         console.log('Cambiando a Persitencia en Base De datos relacional: MONGODB')
         break
 };
 
 class ProductsFactoryDao {
+    
     static getDao() {
         return DAO
     }

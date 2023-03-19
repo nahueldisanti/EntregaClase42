@@ -3,6 +3,14 @@ export default class ProductsDaoMem {
         this.products = []
     }
 
+    static getInstance() {
+        if(!instance) {
+            instance = new ProductsDaoMem()
+        }
+
+        return instance
+    }
+
     getAll() {
         return this.products;
     };

@@ -8,6 +8,13 @@ class ProductsDaoClass {
         this.client.connect();
     }
 
+    static getInstance() {
+        if(!instance) {
+            instance = new ProductsDaoMem()
+        }
+
+        return instance
+    }
     
     async getAllProducts(){
         try{
