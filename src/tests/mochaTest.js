@@ -1,7 +1,5 @@
 import axios from "axios";
-import { streetEqual, deepStrictEqual} from 'assert'
-
-const assert = assert.strict;
+import { strictEqual } from 'assert'
 
 let productId = "64191032103305a70517c2e9"
 
@@ -41,16 +39,19 @@ describe('Probando API CRUD.', function () {
 
     it('Deberia traer los productos', async () =>{
         const allProducts = await getProduct;
-        console.log(allPorducts.data)
+        console.log(allProducts.data)
+        assert.notStrictEqual(allProducts, undefined)
     })
 
     it("Deberia hacer POST de UN producto", async () =>{
         const savedProduct = await postProduct(productTest);
         console.log(savedProduct.data);
+        assert.strictEqual(savedProduct.name, productTest.name)
     })
 
     it("Deberia eliminar el producto dado cierto ID", async () => {
         const deletedProduct = await deleteProduct(productId);
+        assert.strictEqual(productId, dletedProduct.id)
     })
 
 })
